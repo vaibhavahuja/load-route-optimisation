@@ -1,23 +1,22 @@
 [
   {
     "request_id": "UUID",
-    "vehicle": [
-      {
-        "max_load_capacity": 1,
-        "height_in_cm": 10,
-        "weight_in_cm": 10,
-        "length_in_cm": 10
-      }
-    ],
-    "number_of_items": 4,
+    "vehicle":
+    {
+      "max_load_capacity": 100,
+      "height_in_cm": 100,
+      "width_in_cm": 100,
+      "length_in_cm": 100
+    },
+    "number_of_items": 1,
     "items": [
       {
         "name": "check",
         "weight": 20,
         "box_length_in_cm": 50,
         "box_width_in_cm": 30,
-        "box_height_in_cm": 42,
-        "shelf_life_days": 6,
+        "box_height_in_cm": 40,
+        "shelf_life_days": 7,
         "cost": 270
       }
     ]
