@@ -4,6 +4,7 @@ type OptimalLotSizeRequest struct {
 	RequestId     string  `json:"request_id"`
 	Vehicle       Vehicle `json:"vehicle"`
 	NumberOfItems int     `json:"number_of_items"`
+	Type          int     `json:"type_of_good"`
 	Items         []Item  `json:"item"`
 }
 

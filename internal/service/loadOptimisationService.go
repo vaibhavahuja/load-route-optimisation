@@ -9,7 +9,7 @@ import (
 func (app *Application) CalculateOptimalLotSize(request entities.OptimalLotSizeRequest) (response entities.OptimalLotSizeResponse, err error) {
 	log.Infof("received the following request %v", request)
 	//applying knapsack on type in items!!
-	val, volumetricWeightMap := getKnapsackInputLists(request.Items)
+	val, volumetricWeightMap := getKnapsackInputLists(request.Items, request.Type)
 	vehicle := request.Vehicle
 	optimisedListOfItems := knapsack(request.Items, val, volumetricWeightMap, calculateVolumetricWeight(vehicle.WidthInCm, vehicle.HeightInCm, vehicle.LengthInCm))
 	log.Info("After applying knapsack algorithm the most optimised input list of items is %v", optimisedListOfItems)
@@ -26,8 +26,8 @@ func calculateTotalWeight(items []entities.Item) (int, int) {
 	totalWeightOfItems := 0
 	totalVolumetricWeight := 0
 	for _, item := range items {
-		totalVolumetricWeight += item.Weight
-		totalWeightOfItems += calculateVolumetricWeight(item.BoxHeightInCm, item.BoxLengthInCm, item.BoxWidthInCm)
+		totalWeightOfItems += item.Weight
+		totalVolumetricWeight += calculateVolumetricWeight(item.BoxHeightInCm, item.BoxLengthInCm, item.BoxWidthInCm)
 	}
 	return totalWeightOfItems, totalVolumetricWeight
 }
@@ -35,11 +35,16 @@ func calculateTotalWeight(items []entities.Item) (int, int) {
 //getKnapsackInputLists
 //While trying to optimise the load, we try to maximise the value as much as we can
 //Calculating the value map which will be used in the knapsack solution
-func getKnapsackInputLists(request []entities.Item) ([]int, []int) {
+func getKnapsackInputLists(request []entities.Item, typeOfGood int) ([]int, []int) {
 	var valueMap, volumetricWeightMap []int
 	for _, item := range request {
 		valueMap = append(valueMap, generateValueOfItem(item))
-		volumetricWeightMap = append(volumetricWeightMap, calculateVolumetricWeight(item.BoxHeightInCm, item.BoxLengthInCm, item.BoxWidthInCm))
+		switch typeOfGood {
+		case constants.VolumeTypeGoods:
+			volumetricWeightMap = append(volumetricWeightMap, calculateVolumetricWeight(item.BoxHeightInCm, item.BoxLengthInCm, item.BoxWidthInCm))
+		case constants.WeightTypeGoods:
+			volumetricWeightMap = append(volumetricWeightMap, item.Weight)
+		}
 	}
 
 	return valueMap, volumetricWeightMap
@@ -49,7 +54,7 @@ func getKnapsackInputLists(request []entities.Item) ([]int, []int) {
 // Value is calculated by combining various parameters. This can be extended to more parameters.
 // Giving weights to different parameters and calculating a final weighted value
 func generateValueOfItem(item entities.Item) int {
-	return (item.Cost*constants.CommodityPriceWeightage + item.ShelfLifeDays*constants.ShelfLifeWeightage) / 100
+	return (item.Cost*constants.CommodityPriceWeightage + (-1*item.ShelfLifeDays)*constants.ShelfLifeWeightage) / 100
 }
 
 //knapsack This method calculates the items which are to be included in the load
@@ -66,7 +71,7 @@ func knapsack(items []entities.Item, value, volumetricWeight []int, capacity int
 		for w := 0; w <= capacity; w++ {
 			if i == 0 || w == 0 {
 				dpArray[i][w] = 0
-			} else if volumetricWeight[i-1] <= capacity {
+			} else if volumetricWeight[i-1] <= w {
 				dpArray[i][w] = max(value[i-1]+dpArray[i-1][w-volumetricWeight[i-1]], dpArray[i-1][w])
 			} else {
 				dpArray[i][w] = dpArray[i-1][w]
@@ -84,6 +89,7 @@ func knapsack(items []entities.Item, value, volumetricWeight []int, capacity int
 			continue
 		} else {
 			output = append(output, items[i-1])
+			totalValue = totalValue - value[i-1]
 			w = w - volumetricWeight[i-1]
 		}
 	}
