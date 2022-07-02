@@ -17,13 +17,14 @@
         "box_length_in_cm": 50,
         "box_width_in_cm": 30,
         "box_height_in_cm": 42,
-        "shelf_life_days": true,
+        "shelf_life_days": 6,
         "cost": 270
       }
     ]
   },
   {
     "request_id": "UUID",
+    "type_of_items": 1,
     "number_of_items": 3,
     "total_weight_of_items": 3,
     "total_volumetric_weight": 300,
