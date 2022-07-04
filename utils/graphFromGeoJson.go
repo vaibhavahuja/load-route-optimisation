@@ -2,7 +2,6 @@ package utils
 
 import (
 	"encoding/json"
-	"fmt"
 	log "github.com/sirupsen/logrus"
 	"github.com/vaibhavahuja/load-route-optimisation/internal/entities"
 	"io/ioutil"
@@ -33,11 +32,11 @@ func GenerateGraphFromOpenMapsApiData() (graph *ItemGraph) {
 	inputGraph := InputGraph{Graph: myGraphInputData}
 	graph = CreateGraph(inputGraph)
 
-	log.Info("trying to print the graph")
-	for _, val := range graph.Nodes {
-		printEdgesList(graph.Edges[*val])
-		fmt.Println()
-	}
+	//log.Info("trying to print the graph")
+	//for _, val := range graph.Nodes {
+	//	printEdgesList(graph.Edges[*val])
+	//	fmt.Println()
+	//}
 
 	return
 }
