@@ -42,6 +42,29 @@ func (app *Application) FindOptimalRoute(request entities.OptimalRouteRequest) (
 	return
 }
 
+func (app *Application) FindOptimalRouteAcrossMultiNodes(request entities.OptimalRouteMultipleNodesRequest) (response entities.OptimalRouteResponse, err error) {
+	log.Infof("received the following request %v", request)
+	for locationIndex := 0; locationIndex < len(request.LocationList)-1; locationIndex++ {
+		startLocationNode := request.LocationList[locationIndex].GetNodeFromLocation()
+		endLocationNode := request.LocationList[locationIndex+1].GetNodeFromLocation()
+
+		log.Infof("start node is %v and end node is %v", startLocationNode, endLocationNode)
+		optimalRouteRequest := entities.OptimalRouteRequest{
+			StartLocation: request.LocationList[locationIndex],
+			EndLocation:   request.LocationList[locationIndex+1],
+		}
+		optimalRoute, err := app.FindOptimalRoute(optimalRouteRequest)
+		if err != nil {
+			log.Errorf("error while finding optimal route %s", err)
+		}
+		response.TotalDistanceInKm += optimalRoute.TotalDistanceInKm
+		for _, val := range optimalRoute.Route {
+			response.Route = append(response.Route, val)
+		}
+	}
+	return
+}
+
 func convertStringToFloat(input string) (f float64) {
 	//log.Infof("received a string to convert %s", input)
 	f, err := strconv.ParseFloat(input, 1)

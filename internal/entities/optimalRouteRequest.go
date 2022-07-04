@@ -10,6 +10,11 @@ type OptimalRouteRequest struct {
 	EndLocation   Location `json:"end_location"`
 }
 
+type OptimalRouteMultipleNodesRequest struct {
+	RequestId    string     `json:"request_id"`
+	LocationList []Location `json:"location_list"`
+}
+
 type Location struct {
 	Longitude float64 `json:"longitude"`
 	Latitude  float64 `json:"latitude"`

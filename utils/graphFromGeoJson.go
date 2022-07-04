@@ -9,7 +9,7 @@ import (
 )
 
 func GenerateGraphFromOpenMapsApiData() (graph *ItemGraph) {
-	geoJson := fetchTestData("/test-data/mapsGeo.json")
+	geoJson := fetchTestData("/test-data/mapsGeo2.json")
 	var myGraphInputData []InputData
 	for _, feature := range geoJson.Features {
 		coordinatesList := feature.Geometry.Coordinates

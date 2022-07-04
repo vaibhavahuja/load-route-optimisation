@@ -28,6 +28,7 @@ func main() {
 	r.HandleFunc("/health-check", svc.HealthCheck).Methods("GET")
 	r.HandleFunc("/api/v1/optimise-load", svc.LoadOptimisationHandler).Methods("POST")
 	r.HandleFunc("/api/v1/optimise-route", svc.RouteOptimisationHandler).Methods("POST")
+	r.HandleFunc("/api/v1/optimise-multinode", svc.MultiNodeRouteOptimisationHandler).Methods("POST")
 	r.HandleFunc("/api/v1/report-blocker", svc.ReportRouteBlockerHandler).Methods("POST")
 
 	server := RunHttpServer(":8080", r)
