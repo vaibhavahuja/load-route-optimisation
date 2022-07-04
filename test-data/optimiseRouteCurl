@@ -1,0 +1,13 @@
+curl --location --request POST 'localhost:8080/api/v1/optimise-route' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "request_id": "some_sha_value",
+    "start_location": {
+        "longitude": 12.1212,
+        "latitude": 12.1313
+    },
+    "end_location": {
+        "longitude": 14.1212,
+        "latitude": 14.1313
+    }
+}'
