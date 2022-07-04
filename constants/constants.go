@@ -9,5 +9,5 @@ const (
 	CommodityPriceWeightage            = 30
 	AccidentRoadBlockerType            = "Accident"
 	AccidentRoadBlockerExpiryTime      = 20 * time.Second
-	AccidentRoadBlockerWeightIncrement = 100
+	AccidentRoadBlockerWeightIncrement = 1000
 )

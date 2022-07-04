@@ -1,5 +1,6 @@
 package entities
 
 type OptimalRouteResponse struct {
-	Value interface{} `json:"value"`
+	TotalDistanceInKm float64    `json:"total_distance_in_km"`
+	Route             []Location `json:"route"`
 }

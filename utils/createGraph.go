@@ -40,8 +40,11 @@ func (g *ItemGraph) AddEdge(n1, n2 *entities.Node, weight int) {
 //UpdateWeightOfEdge updates the weight of 2 edges based on the weightIncrement provided
 func (g *ItemGraph) UpdateWeightOfEdge(n1, n2 *entities.Node, weightIncrement int) bool {
 	g.Lock.Lock()
-	log.Info("updating weight of edge %s to %s by %d", n1.Value, n2.Value, weightIncrement)
+	log.Infof("updating weight of edge %s to %s by %d", n1.Value, n2.Value, weightIncrement)
+	log.Infof("length of edges from node n1 is %v", len(g.Edges[*n1]))
 	for _, val := range g.Edges[*n1] {
+		log.Infof("node edge value is %v", val)
+		log.Infof("value of current node is %v", n1.Value)
 		if val.DestinationMeta == n2.Value {
 			val.Weight += weightIncrement
 		}
@@ -52,6 +55,7 @@ func (g *ItemGraph) UpdateWeightOfEdge(n1, n2 *entities.Node, weightIncrement in
 			val.Weight += weightIncrement
 		}
 	}
+	log.Infof("new weight of edge %s to %s is %v", n1.Value, n2.Value, g.Edges[*n1])
 	g.Lock.Unlock()
 	return true
 }

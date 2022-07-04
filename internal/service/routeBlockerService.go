@@ -29,5 +29,6 @@ func (app *Application) ReportRouteBlocker(request entities.ReportRouteBlocker) 
 			}
 		}(app.graph, request.RoadStartCoordinate.GetNodeFromLocation(), request.RoadEndCoordinate.GetNodeFromLocation())
 	}
+	response = true
 	return
 }

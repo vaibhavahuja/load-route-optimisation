@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-func GetShortestPath(startNode *entities.Node, endNode *entities.Node, g *ItemGraph) ([]string, int) {
+func GetShortestPath(startNode, endNode *entities.Node, g *ItemGraph) ([]string, int) {
 	visited := make(map[string]bool)
 	dist := make(map[string]int)
 	prev := make(map[string]string)

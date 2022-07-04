@@ -4,6 +4,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/vaibhavahuja/load-route-optimisation/internal/entities"
 	"github.com/vaibhavahuja/load-route-optimisation/utils"
+	"strconv"
+	"strings"
 )
 
 func (app *Application) FindOptimalRoute(request entities.OptimalRouteRequest) (response entities.OptimalRouteResponse, err error) {
@@ -11,13 +13,40 @@ func (app *Application) FindOptimalRoute(request entities.OptimalRouteRequest) (
 
 	startNode := request.StartLocation.GetNodeFromLocation()
 	endNode := request.EndLocation.GetNodeFromLocation()
-	//startNode := &entities.Node{Value: "A"}
-	//endNode := &entities.Node{Value: "B"}
 	log.Infof("start node is %v and end node is %v", startNode, endNode)
 
 	list, val := utils.GetShortestPath(startNode, endNode, app.graph)
+	log.Infof("after the shortest path the val is %d", val)
+	var route []entities.Location
+	var distance float64
+	for index := 0; index < len(list); index++ {
+		//To evaluate (tc of regex extraction) : can use regex to extract instead?
+		hashIndex := strings.Index(list[index], "#")
+		log.Infof("before any conversion lat %s long %s", list[index][3:hashIndex], list[index][hashIndex+5:])
+		latitude := convertStringToFloat(list[index][3:hashIndex])
+		longitude := convertStringToFloat(list[index][hashIndex+5:])
+		log.Info("the latitude is %v and longitude is %v", latitude, longitude)
+		locationObject := entities.Location{
+			Longitude: longitude,
+			Latitude:  latitude,
+		}
+		route = append(route, locationObject)
+		//log.Infof("got the latitude as %f and longitude as %f", latitude, longitude)
+	}
+	for index := 0; index < len(route)-1; index++ {
+		distance += utils.FindHaversineDistanceInKm(route[index], route[index+1])
+	}
 
-	log.Info(val)
-	response.Value = list
+	response.TotalDistanceInKm = distance
+	response.Route = route
+	return
+}
+
+func convertStringToFloat(input string) (f float64) {
+	//log.Infof("received a string to convert %s", input)
+	f, err := strconv.ParseFloat(input, 1)
+	if err != nil {
+		log.Errorf("Error while converting string to float %s", err)
+	}
 	return
 }

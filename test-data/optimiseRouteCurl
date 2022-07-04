@@ -3,11 +3,11 @@ curl --location --request POST 'localhost:8080/api/v1/optimise-route' \
 --data-raw '{
     "request_id": "some_sha_value",
     "start_location": {
-        "longitude": 12.1212,
-        "latitude": 12.1313
+        "latitude": 28.601327658538,
+        "longitude": 77.20487594604492
     },
     "end_location": {
-        "longitude": 14.1212,
-        "latitude": 14.1313
+        "latitude": 28.63297280214777,
+        "longitude": 77.21963882446289
     }
 }'
