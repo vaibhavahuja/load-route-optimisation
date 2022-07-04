@@ -169,8 +169,3 @@ curl --location --request POST 'localhost:8080/api/v1/optimise-multinode' \
     ]
 }'
 ```
-
-### Team 
-- Shivam Paliwal
-- Rishabh Singh
-- Vaibhav Ahuja
