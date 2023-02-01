@@ -18,8 +18,8 @@ func main() {
 	//using data scraped from open maps api
 	graphCreated := utils.GenerateGraphFromOpenMapsApiData()
 	log.Infof("successfully initialised graph with value %v", graphCreated)
-
-	app := service.NewApplication(graphCreated)
+	myCache := "will update this yes!!"
+	app := service.NewApplication(graphCreated, myCache)
 	svc := handlers.NewHttpServer(app)
 	//creating a new router
 	r := mux.NewRouter()
@@ -30,6 +30,7 @@ func main() {
 	r.HandleFunc("/api/v1/optimise-route", svc.RouteOptimisationHandler).Methods("POST")
 	r.HandleFunc("/api/v1/optimise-multinode", svc.MultiNodeRouteOptimisationHandler).Methods("POST")
 	r.HandleFunc("/api/v1/report-blocker", svc.ReportRouteBlockerHandler).Methods("POST")
+	r.HandleFunc("/api/update-cache", svc.UpdateInMemoryCache).Methods("POST")
 
 	server := RunHttpServer(":8080", r)
 	log.Info("Successfully started server")

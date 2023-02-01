@@ -3,11 +3,13 @@ package service
 import "github.com/vaibhavahuja/load-route-optimisation/utils"
 
 type Application struct {
-	graph *utils.ItemGraph
+	graph   *utils.ItemGraph
+	myCache string
 }
 
-func NewApplication(itemGraph *utils.ItemGraph) *Application {
+func NewApplication(itemGraph *utils.ItemGraph, text string) *Application {
 	return &Application{
-		graph: itemGraph,
+		graph:   itemGraph,
+		myCache: text,
 	}
 }
